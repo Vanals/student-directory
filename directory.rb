@@ -4,13 +4,14 @@ def input_students
   puts "To finish, just hit return twice\n\n"
   # create an empty array
   students = []
-  # get the first name
+  # get the name of the student.
   puts "Name:"
   name = gets.chomp
   name = 'NotGiven' if name.empty?
-  # while the name is not empty, repeat this code
+
+  # while the name of the next student is not empty, repeat this code
   while !name.empty? do
-    # Asking more information about the student
+    # Asking more information about the student(cohort, hobby, country of birth, telephone number)
     puts "Cohort:"
     months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
     cohort = gets.chomp.to_sym
@@ -28,15 +29,14 @@ def input_students
     telephone = gets.chomp
     telephone = 'NotGiven' if telephone.empty?
 
-
     # add the student hash to the array
     students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
     puts "----------".center(50)
     puts "Student enrolled. Now we have #{students.count} students".center(50)
-    # get enother name from the user
+    # get the name of the next student if chosen or finish the enrolment.
     puts "\nWrite the name of the next student you want to enrol:"
+    #If the user just pres return, without typing any name, the while loop will stop.
     puts "To finish, just hit return.\n"
-
     name = gets.chomp
   end
   # return the array of students
@@ -67,10 +67,13 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  hash_index = 0
+  list_position = 1
+  while hash_index < students.count
+    puts "#{list_position}. #{students[hash_index][:name]} (#{students[hash_index][:cohort]} cohort)\n"
+    hash_index += 1
+    list_position += 1
   end
-  puts " "
 end
 
 # Thanks to the following method we can ask to the program to print only the students
