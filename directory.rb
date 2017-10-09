@@ -55,7 +55,8 @@ end
 def more_info_about_student(students, name)
   students.each do |student|
     if student[:name] == name
-      puts "#{name} was born in #{student[:country]}, its hobby is #{student[:hobby]} and its telephone number is #{student[:telephone]}."
+      puts "#{name} was born in #{student[:country]}, its hobby is #{student[:hobby]}"
+      puts "and its telephone number is #{student[:telephone]}."
     end
   end
 end
@@ -97,6 +98,7 @@ def print_footer(names)
   puts "Overall, we have #{names.count} great students".center(50)
 end
 
+#TEST COMMANDS ----------- TEST COMMANDS
 students = input_students
 print_header
 print(students)
