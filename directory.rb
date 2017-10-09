@@ -25,9 +25,30 @@ def print_header
 end
 
 def print(students)
-  students.each do |student|
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  students.each_with_index do |student, index|
+    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
   end
+  puts " "
+end
+
+# Thanks to the following method we can ask to the program to print only the students
+# which name starts with a specific letter.
+def print_names_starting_with(letter, students)
+  puts "List of the students which name starts with #{letter}"
+  students.each do |student|
+    puts student[:name] if student[:name][0] == letter
+  end
+  puts " "
+end
+
+# Thanks to the following method we can ask to the program to print only the students
+# which name is shorter than a specific length.
+def print_name_if_length_less_than(students, length)
+  puts "List of the students which name is shorter than #{length} characters:"
+    students.each do |student|
+      puts student[:name] if student[:name].length < length
+    end
+  puts " "
 end
 
 def print_footer(names)
@@ -37,4 +58,6 @@ end
 students = input_students
 print_header
 print(students)
+print_names_starting_with("A", students)
+print_name_if_length_less_than(students, 12)
 print_footer(students)
