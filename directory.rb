@@ -76,6 +76,21 @@ def print(students)
   end
 end
 
+def print_by_cohort(students)
+  months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
+  months_index = 0
+  list_position = 1
+  while months_index < 12
+    students.each do |student|
+      if student[:cohort] == months[months_index]
+        puts "#{list_position}. #{student[:name]} (#{student[:cohort]} cohort)\n"
+        list_position += 1
+      end
+    end
+    months_index += 1
+  end
+end
+
 # Thanks to the following method we can ask to the program to print only the students
 # which name starts with a specific letter.
 def print_names_starting_with(letter, students)
@@ -113,3 +128,6 @@ puts "   "
 more_info_about_student(students, "Marco")
 correction_name(students, 'Macro', 'Marco')
 print(students)
+puts " "
+puts "List printed by order"
+print_by_cohort(students)
