@@ -12,27 +12,29 @@ def input_students
   # while the name of the next student is not empty, repeat this code
   while !name.empty? do
     # Asking more information about the student(cohort, hobby, country of birth, telephone number)
-    puts "Cohort:"
+    puts "\nCohort:"
     months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
     cohort = gets.chomp.to_sym
     while !months.include?(cohort)
       puts "Please write the month correctly:"
       cohort = gets.chomp.to_sym
     end
-    puts "Hobby:"
+    puts "\nHobby:"
     hobby = gets.chomp
     hobby = 'NotGiven' if hobby.empty?
-    puts "Country of birth:"
+    puts "\nCountry of birth:"
     country = gets.chomp
     country = 'NotGiven' if country.empty?
-    puts "Telephone number:"
+    puts "\nTelephone number:"
     telephone = gets.chomp
     telephone = 'NotGiven' if telephone.empty?
 
     # add the student hash to the array
     students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
     puts "----------".center(50)
-    puts "Student enrolled. Now we have #{students.count} students".center(50)
+    $singular_plural_stud = 'students'
+    $singular_plural_stud = 'student' if students.count == 1
+    puts "Student enrolled. Now we have #{students.count} #{$singular_plural_stud}".center(50)
     # get the name of the next student if chosen or finish the enrolment.
     puts "\nWrite the name of the next student you want to enrol:"
     #If the user just pres return, without typing any name, the while loop will stop.
@@ -113,7 +115,7 @@ end
 
 def print_footer(names)
   puts "--------------".center(50)
-  puts "Overall, we have #{names.count} great students".center(50)
+  puts "Overall, we have #{names.count} great #{$singular_plural_stud}".center(50)
 end
 
 #TEST COMMANDS ----------- TEST COMMANDS
