@@ -69,6 +69,9 @@ def print_header
 end
 
 def print(students)
+  #I haven't added any if statement to check if the 'students' array is empty because there is no point doing that.
+  #If 'students' array is empty mean that 'input_students' method has not been used so the array 'students'
+  #has not been initialized and this method won't try to print an empty list, won't work.
   hash_index = 0
   list_position = 1
   while hash_index < students.count
@@ -79,6 +82,9 @@ def print(students)
 end
 
 def print_by_cohort(students)
+  #I haven't added any if statement to check if the 'students' array is empty because there is no point doing that.
+  #If 'students' array is empty mean that 'input_students' method has not been used so the array 'students'
+  #has not been initialized and this method won't try to print an empty list, won't work.
   months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
   months_index = 0
   list_position = 1
