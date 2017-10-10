@@ -1,4 +1,4 @@
-# Create a global empty array, which will contain all the students information.
+# Create a global empty array called $students', which will contain all the students information.
 $students = []
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
 $singular_plural_stud = 'students'
@@ -47,8 +47,10 @@ end
 # This method allow us to correct the name of a student that has been enrolled.
 def correction_name
   students_list_empty
-  correction_name_introduction
+  puts "CORRECTION NAME\n"
+  puts "Which name do you want to correct?"
   wrong_name = gets.chomp
+  puts "What is the new name?"
   new_name = gets.chomp
   $students.each do |student|
     #If the name of a students is equal to what the user said, i will be replaced by the newone.
@@ -133,17 +135,26 @@ def print_name_if_length_less_than
     $students.each do |student|
       puts student[:name] if student[:name].length < length.to_i
     end
-  puts " "
+  continue
+end
+
+def save_students
+  students_list_empty
+  #open the file for writing
+  file = File.open("students.csv", "w")
+  #iterate over the array of students
+  $students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+  puts "The list of students has been saved.".upcase.center(50)
   continue
 end
 
 private
 
-def correction_name_introduction
-  puts "CORRECTION NAME\n"
-  puts "Which name do you want to correct?"
-  puts "What is the new name?"
-end
 
 def print_header
   puts "The students of Villains Academy".center(50).upcase
@@ -175,12 +186,13 @@ def print_menu
   puts "Choose the corrisponding number to the command, write it and then press enter for doing what you desire:\n \n".center(50)
   puts "0. EXIT = Interrupt the program"
   puts "1. SIGN UP = Enrols new students in the Villains Accademy"
-  puts "2.CORRECTION NAME = Changes the name of an enrolled student."
-  puts "3.INFO ABOUT = Prints into the screen information about a student of your choice."
-  puts "4.PRINT LIST = Prints into the screen the list of all the enrolled students."
-  puts "5.PRINT LIST BY COHORT = Prints into the screen the list of all the enrolled students grouped by cohort."
-  puts "6.PRINT STUDENTS NAME STARTING WITH = Prints into the screen the list of all the enrolled students which name start with a letter of your choice.'"
-  puts "7.PRINT STUDENTS NAME LESS LENGTH THAN = Print into the screen the list of all the enrolled students wich name is shorter than an amount of your choice."
+  puts "2. CORRECTION NAME = Changes the name of an enrolled student."
+  puts "3. INFO ABOUT = Prints into the screen information about a student of your choice."
+  puts "4. PRINT LIST = Prints into the screen the list of all the enrolled students."
+  puts "5. PRINT LIST BY COHORT = Prints into the screen the list of all the enrolled students grouped by cohort."
+  puts "6. PRINT STUDENTS NAME STARTING WITH = Prints into the screen the list of all the enrolled students which name start with a letter of your choice.'"
+  puts "7. PRINT STUDENTS NAME LESS LENGTH THAN = Print into the screen the list of all the enrolled students wich name is shorter than an amount of your choice."
+  puts "8. SAVE THE LIST TO STUDENTS.CSV = Save the list of students in the file students.csv."
   puts "\nWrite the corrisponding number and then press enter:"
   puts "> "
 end
@@ -208,6 +220,7 @@ def process(selection)
     when "5" then show_students_by_cohort
     when "6" then print_names_starting_with
     when "7" then print_name_if_length_less_than
+    when "8" then save_students
     else
       puts "This command doesn't exist. Write the command correctly. Press enter to go back to the MENU"
       continue
@@ -224,3 +237,14 @@ end
 
 
 interactive_menu
+
+
+#EX 11 and 10 to do.
+
+=begin
+command to delete a student from the list
+Ogni comand ha continue?
+Quelli che ne hanno bisogno checkano se la students global variable è empry?
+Cambia correction name and more info method da each a while/UNTIl per poter inserire un messaggio di error enel caso non sitrovi nessuno studente.
+sistema aspetto comando 6 e 7, rispetto a 4 e 5 son molto anonimi e quasi confusi.
+=end
