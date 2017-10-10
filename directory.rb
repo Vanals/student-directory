@@ -1,6 +1,7 @@
 # Create a global empty array, which will contain all the students information.
 $students = []
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
+$singular_plural_stud = 'students'
 
 # Let's put all students into an array
 def input_students
@@ -10,7 +11,6 @@ def input_students
   puts "Name:"
   name = gets.chomp.capitalize
   name = 'NotGiven' if name.empty?
-
   # While the name of the next student is not empty, repeat this code
   while !name.empty? do
     # Asking more information about the student(cohort, hobby, country of birth, telephone number)
@@ -29,12 +29,10 @@ def input_students
     puts "\nTelephone number:"
     telephone = gets.chomp
     telephone = 'NotGiven' if telephone.empty?
-
     # Add the student hash to the array
     $students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
     puts "----------".center(50)
     # Change the value of 'singular_plural_stud' global variable, in base of how many students have been enrolled.
-    $singular_plural_stud = 'students'
     $singular_plural_stud = 'student' if $students.count == 1
     puts "Student enrolled. Now we have #{$students.count} #{$singular_plural_stud}".center(50).upcase
     # Get the name of the next student if chosen or finish the enrolment.
@@ -44,17 +42,13 @@ def input_students
     name = gets.chomp.capitalize
   end
   # Return the array of students
-  $students
 end
 
 # This method allow us to correct the name of a student that has been enrolled.
 def correction_name
   students_list_empty
-  #Going trough each hash, each student information.
-  puts "CORRECTION NAME\n"
-  puts "Which name do you want to correct?"
+  correction_name_introduction
   wrong_name = gets.chomp
-  puts "What is the new name?"
   new_name = gets.chomp
   $students.each do |student|
     #If the name of a students is equal to what the user said, i will be replaced by the newone.
@@ -97,11 +91,10 @@ end
 # print_by_cohort() prints out the list of the enrolled students grouped by cohort.
 def print_by_cohort
   students_list_empty
-
-  months_index = 0
-  list_position = 1
   puts "The students of Villains Academy grouped by cohort".upcase.center(50)
   puts "-------".center(50)
+  months_index = 0
+  list_position = 1
   while months_index < 12
     $students.each do |student|
       if student[:cohort] == $months[months_index]
@@ -146,6 +139,12 @@ end
 
 private
 
+def correction_name_introduction
+  puts "CORRECTION NAME\n"
+  puts "Which name do you want to correct?"
+  puts "What is the new name?"
+end
+
 def print_header
   puts "The students of Villains Academy".center(50).upcase
   puts "--------------".center(50)
@@ -186,21 +185,27 @@ def print_menu
   puts "> "
 end
 
+def show_students
+  print_header
+  print_stud
+  print_footer
+  continue
+end
+
+def show_students_by_cohort
+  print_by_cohort
+  print_footer
+  continue
+end
+
 def process(selection)
   case selection
     when "0" then exit(0)
     when "1" then input_students
     when "2" then correction_name
     when "3" then more_info_about_student
-    when "4"
-      print_header
-      print_stud
-      print_footer
-      continue
-    when "5"
-      print_by_cohort
-      print_footer
-      continue
+    when "4" then show_students
+    when "5" then show_students_by_cohort
     when "6" then print_names_starting_with
     when "7" then print_name_if_length_less_than
     else
