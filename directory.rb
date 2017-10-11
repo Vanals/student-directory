@@ -153,6 +153,17 @@ def save_students
   continue
 end
 
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, cohort = line.chomp.split(',')
+      $students << {name: name, cohort: cohort.to_sym}
+    end
+  file.close
+  puts "The list of students has been load.".upcase
+  continue
+end
+
 private
 
 
@@ -193,6 +204,7 @@ def print_menu
   puts "6. PRINT STUDENTS NAME STARTING WITH = Prints into the screen the list of all the enrolled students which name start with a letter of your choice.'"
   puts "7. PRINT STUDENTS NAME LESS LENGTH THAN = Print into the screen the list of all the enrolled students wich name is shorter than an amount of your choice."
   puts "8. SAVE THE LIST TO STUDENTS.CSV = Save the list of students in the file students.csv."
+  puts "9. LOAD THE LIST FROM STUDENTS.CSV = Load the list of the enrolled students from the file  'students.csv'"
   puts "\nWrite the corrisponding number and then press enter:"
   puts "> "
 end
@@ -221,6 +233,7 @@ def process(selection)
     when "6" then print_names_starting_with
     when "7" then print_name_if_length_less_than
     when "8" then save_students
+    when "9" then load_students
     else
       puts "This command doesn't exist. Write the command correctly. Press enter to go back to the MENU"
       continue
@@ -242,6 +255,7 @@ interactive_menu
 #EX 11 and 10 to do.
 
 =begin
+aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. .
 command to delete a student from the list
 Ogni comand ha continue?
 Quelli che ne hanno bisogno checkano se la students global variable è empry?
