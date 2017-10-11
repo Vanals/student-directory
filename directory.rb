@@ -1,4 +1,5 @@
 # Create a global empty array called $students', which will contain all the students information.
+ARGV
 $students = []
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
 $singular_plural_stud = 'students'
@@ -9,7 +10,7 @@ def input_students
   puts "To finish, just hit return twice\n\n"
   # Get the name of the student.
   puts "Name:"
-  name = gets.chomp.capitalize
+  name = STDIN.gets.chomp.capitalize
   name = 'NotGiven' if name.empty?
   # While the name of the next student is not empty, repeat this code
   while !name.empty? do
@@ -18,16 +19,16 @@ def input_students
     cohort = gets.chomp.to_sym
     while !$months.include?(cohort)
       puts "Please write the month correctly:"
-      cohort = gets.chomp.to_sym
+      cohort = STDIN.gets.chomp.to_sym
     end
     puts "\nHobby:"
-    hobby = gets.chomp
+    hobby = $stdin.gets.chomp
     hobby = 'NotGiven' if hobby.empty?
     puts "\nCountry of birth:"
-    country = gets.chomp
+    country = STDIN.gets.chomp
     country = 'NotGiven' if country.empty?
     puts "\nTelephone number:"
-    telephone = gets.chomp
+    telephone = STDIN.gets.chomp
     telephone = 'NotGiven' if telephone.empty?
     # Add the student hash to the array
     $students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
@@ -39,7 +40,7 @@ def input_students
     puts "\nWrite the name of the next student you want to enrol:".upcase
     #If the user just pres return, without typing any name, the while loop will stop.
     puts "To finish and go back to the MENU, just hit return.\n"
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
   end
   # Return the array of students
 end
@@ -49,9 +50,9 @@ def correction_name
   students_list_empty
   puts "CORRECTION NAME\n"
   puts "Which name do you want to correct?"
-  wrong_name = gets.chomp
+  wrong_name = STDIN.gets.chomp
   puts "What is the new name?"
-  new_name = gets.chomp
+  new_name = STDIN.gets.chomp
   $students.each do |student|
     #If the name of a students is equal to what the user said, i will be replaced by the newone.
     if student[:name] == wrong_name
@@ -67,7 +68,7 @@ end
 def more_info_about_student
   students_list_empty
   puts "Who is the student you want to know more about?".upcase
-  name = gets.chomp
+  name = STDIN.gets.chomp
   $students.each do |student|
     if student[:name] == name
       puts "\n-#{name} was born in #{student[:country]}, its hobby is #{student[:hobby]}"
@@ -113,7 +114,7 @@ end
 def print_names_starting_with
   students_list_empty
   puts "Write the letter which the names of the students have to start with:"
-  letter = gets.chomp.upcase
+  letter = STDIN.gets.chomp.upcase
   puts "\nList of the students which name starts with the letter '#{letter}'\n".center(50, '-').upcase
   list_position = 1
   $students.each do |student|
@@ -130,7 +131,7 @@ end
 def print_name_if_length_less_than
   students_list_empty
   puts "The names have to be shorter than?"
-  length = gets.chomp
+  length = STDIN.gets.chomp
   puts "\nList of the students which name is shorter than #{length} characters:\n".upcase.center(50)
     $students.each do |student|
       puts student[:name] if student[:name].length < length.to_i
@@ -153,8 +154,20 @@ def save_students
   continue
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first # First argument from the command line
+  return if filename.nil? # Get out the method if it isn't given
+  if File.exists?(filename) # If it exists
+    load_students(filename)
+     puts "Loaded #{$students.count} from #{filename}"
+   else # If it doesn't exist
+     puts "Sorry, #{filename} doesn't exist."
+     exit # Quit the program
+   end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
       $students << {name: name, cohort: cohort.to_sym}
@@ -165,7 +178,6 @@ def load_students
 end
 
 private
-
 
 def print_header
   puts "The students of Villains Academy".center(50).upcase
@@ -179,7 +191,7 @@ end
 
 def continue
   puts "\nTo continue and go back to the MENU, press enter."
-  gets
+  STDIN.gets
 end
 
 def students_list_empty
@@ -243,12 +255,12 @@ end
 def interactive_menu
   loop do
     print_menu
-    user_comand = gets.chomp
+    user_comand = STDIN.gets.chomp
     process(user_comand)
   end
 end
 
-
+try_load_students
 interactive_menu
 
 
