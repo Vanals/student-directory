@@ -141,11 +141,13 @@ end
 
 def save_students
   students_list_empty
+  puts "In which file do you want to save the actual list?".upcase
+  file_choosen = STDIN.gets.chomp
   #open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open(file_choosen, "w")
   #iterate over the array of students
   $students.each do |student|
-    student_data = [student[:name], student[:cohort]]
+    student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:telephone]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
@@ -154,9 +156,13 @@ def save_students
   continue
 end
 
+
 def try_load_students
   filename = ARGV.first # First argument from the command line
-  return if filename.nil? # Get out the method if it isn't given
+  if filename.nil? # Get out the method if it isn't given
+    load_students_default
+    return
+  end
   if File.exists?(filename) # If it exists
     load_students(filename)
      puts "Loaded #{$students.count} from #{filename}"
@@ -166,18 +172,33 @@ def try_load_students
    end
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
+
+
+def load_students_from
+  $students.clear
+  puts "From which file do you want load the list of students?".upcase
+  file_choosen = STDIN.gets.chomp
+  file = File.open(file_choosen, "r")
   file.readlines.each do |line|
-    name, cohort = line.chomp.split(',')
-      $students << {name: name, cohort: cohort.to_sym}
-    end
+    name, cohort, hobby, country, telephone = line.split(',')
+    $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
+  end
   file.close
-  puts "The list of students has been load.".upcase
-  continue
+  puts "\nThe list from #{file_choosen} has been load.".upcase
 end
 
 private
+
+def load_students_default(filename = "students.csv")
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+    name, cohort, hobby, country, telephone = line.chomp.split(',')
+      $students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
+    end
+  file.close
+  puts "The list of students has been load from students.csv.".upcase
+  continue
+end
 
 def print_header
   puts "The students of Villains Academy".center(50).upcase
@@ -215,8 +236,8 @@ def print_menu
   puts "5. PRINT LIST BY COHORT = Prints into the screen the list of all the enrolled students grouped by cohort."
   puts "6. PRINT STUDENTS NAME STARTING WITH = Prints into the screen the list of all the enrolled students which name start with a letter of your choice.'"
   puts "7. PRINT STUDENTS NAME LESS LENGTH THAN = Print into the screen the list of all the enrolled students wich name is shorter than an amount of your choice."
-  puts "8. SAVE THE LIST TO STUDENTS.CSV = Save the list of students in the file students.csv."
-  puts "9. LOAD THE LIST FROM STUDENTS.CSV = Load the list of the enrolled students from the file  'students.csv'"
+  puts "8. SAVE THE LIST TO A FILE OF YOU CHOICE = Save the list of students actually loaded to a file of your choice."
+  puts "9. LOAD THE LIST FROM A DIFFERENT FILE = Load the list of the enrolled students from a file of your choice"
   puts "\nWrite the corrisponding number and then press enter:"
   puts "> "
 end
@@ -234,6 +255,12 @@ def show_students_by_cohort
   continue
 end
 
+def load_students_from_process
+  print_header
+  load_students_from
+  continue
+end
+
 def process(selection)
   case selection
     when "0" then exit(0)
@@ -245,7 +272,7 @@ def process(selection)
     when "6" then print_names_starting_with
     when "7" then print_name_if_length_less_than
     when "8" then save_students
-    when "9" then load_students
+    when "9" then load_students_from_process
     else
       puts "This command doesn't exist. Write the command correctly. Press enter to go back to the MENU"
       continue
@@ -267,10 +294,10 @@ interactive_menu
 #EX 11 and 10 to do.
 
 =begin
-aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. .
-command to delete a student from the list
-Ogni comand ha continue?
-Quelli che ne hanno bisogno checkano se la students global variable è empry?
-Cambia correction name and more info method da each a while/UNTIl per poter inserire un messaggio di error enel caso non sitrovi nessuno studente.
-sistema aspetto comando 6 e 7, rispetto a 4 e 5 son molto anonimi e quasi confusi.
+-aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. . step 13
+-command to delete a student from the list
+
+
+-Cambia correction name and more info method da each a while/UNTIl per poter inserire un messaggio di error enel caso non sitrovi nessuno studente.
+-sistema aspetto comando 6 e 7, rispetto a 4 e 5 son molto anonimi e quasi confusi.
 =end
