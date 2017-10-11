@@ -1,4 +1,3 @@
-# Create a global empty array called $students', which will contain all the students information.
 ARGV
 $students = []
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
@@ -144,14 +143,14 @@ def save_students
   puts "In which file do you want to save the actual list?".upcase
   file_choosen = STDIN.gets.chomp
   #open the file for writing
-  file = File.open(file_choosen, "w")
-  #iterate over the array of students
-  $students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:telephone]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
+  file = File.open(file_choosen, "w") do |data|
+    #iterate over the array of students
+    $students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:telephone]]
+      csv_line = student_data.join(",")
+      data.puts csv_line
+     end
+   end
   puts "The list of students has been saved.".upcase.center(50)
   continue
 end
@@ -178,24 +177,24 @@ def load_students_from
   $students.clear
   puts "From which file do you want load the list of students?".upcase
   file_choosen = STDIN.gets.chomp
-  file = File.open(file_choosen, "r")
-  file.readlines.each do |line|
+  file = File.open(file_choosen, "r") do |data|
+  data.readlines.each do |line|
     name, cohort, hobby, country, telephone = line.split(',')
     $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
   end
-  file.close
+  end
   puts "\nThe list from #{file_choosen} has been load.".upcase
 end
 
 private
 
 def load_students_default(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
+  file = File.open(filename, "r") do |data|
+  data.readlines.each do |line|
     name, cohort, hobby, country, telephone = line.chomp.split(',')
       $students << {name: name, cohort: cohort, hobby: hobby, country: country, telephone: telephone }
     end
-  file.close
+  end
   puts "The list of students has been load from students.csv.".upcase
   continue
 end
@@ -289,15 +288,3 @@ end
 
 try_load_students
 interactive_menu
-
-
-#EX 11 and 10 to do.
-
-=begin
--aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. . step 13
--command to delete a student from the list
-
-
--Cambia correction name and more info method da each a while/UNTIl per poter inserire un messaggio di error enel caso non sitrovi nessuno studente.
--sistema aspetto comando 6 e 7, rispetto a 4 e 5 son molto anonimi e quasi confusi.
-=end
