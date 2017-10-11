@@ -9,7 +9,7 @@ def input_students
   puts "To finish, just hit return twice\n\n"
   # Get the name of the student.
   puts "Name:"
-  name = STDIN.gets.delete("\n").capitalize
+  name = STDIN.gets.delete("\n ").capitalize
   name = 'NotGiven' if name.empty?
   # While the name of the next student is not empty, repeat this code
   while !name.empty? do
@@ -68,13 +68,17 @@ def more_info_about_student
   students_list_empty
   puts "Who is the student you want to know more about?".upcase
   name = STDIN.gets.chomp
-  $students.each do |student|
-    if student[:name] == name
-      puts "\n-#{name} was born in #{student[:country]}, its hobby is #{student[:hobby]}"
-      puts "and its telephone number is #{student[:telephone]}."
-      continue
-      interactive_menu
-    end
+  index = nil
+  $students.each_with_index do |student, indirizzo|
+    index = indirizzo if student[:name] == name
+  end
+  if index.is_a?Integer
+    puts "\n-#{name} was born in #{$students[index][:country]}, its hobby is #{$students[index][:hobby]}"
+    puts "and its telephone number is #{$students[index][:telephone]}.".upcase
+    continue
+  else
+    puts "No student named #{name} has been found".upcase
+    continue
   end
 end
 
@@ -116,12 +120,11 @@ def print_names_starting_with
   letter = STDIN.gets.chomp.upcase
   puts "\nList of the students which name starts with the letter '#{letter}'\n".center(50, '-').upcase
   list_position = 1
+  arr = []
   $students.each do |student|
-    if student[:name][0] == letter
-      puts "#{list_position}. #{student[:name]} (#{student[:cohort]} cohort)"
-      list_position += 1
-    end
+    arr << student[:name] if student[:name][0] == letter
   end
+  puts arr.empty? ? "\n-No names starting with the letter #{letter} has been found" : arr
   continue
 end
 
@@ -136,11 +139,7 @@ def print_name_if_length_less_than
     $students.each do |student|
       arr << student[:name] if student[:name].length < length.to_i
     end
-    if arr.empty?
-      puts "\n-No names shorter than #{length} has been found".upcase
-    else
-      puts arr
-    end
+    puts arr.empty? ?  "\n-No names shorter than #{length} has been found".upcase : arr
   continue
 end
 
@@ -167,10 +166,10 @@ def load_students_from
   puts "From which file do you want load the list of students?".upcase
   file_choosen = STDIN.gets.chomp
   file = File.open(file_choosen, "r") do |data|
-  data.readlines.each do |line|
-    name, cohort, hobby, country, telephone = line.split(',')
-    $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
-  end
+    data.readlines.each do |line|
+      name, cohort, hobby, country, telephone = line.split(',')
+      $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
+    end
   end
   puts "\nThe list from #{file_choosen} has been load.".upcase
 end
@@ -222,7 +221,6 @@ def students_list_empty
   if $students.empty?
     puts "The list of students is empty".upcase
     continue
-    interactive_menu
   end
 end
 
@@ -292,16 +290,3 @@ end
 
 try_load_students
 interactive_menu
-
-
-#EX 10 to do.
-#Ex 1, 3, 7, 8.
-=begin
-fai un while loop ai comandi x vedere le info, list of names,  correction name cosi se no trovano nessuno ti puo dare un mess di errore
- aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. .
- command to delete a student from the list
- Ogni comand ha continue?
- Quelli che ne hanno bisogno checkano se la students global variable è empry?
- print by cohort funziona solo dopo che fai un load, atrimenti nn prnta nughiazzu
- -Crea un buon TEST ogni volta che fai nuovi methodi, cosi quando fai cambiamenti non rischi di scoprirti bug alla fine
-=end
