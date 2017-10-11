@@ -131,12 +131,19 @@ def print_name_if_length_less_than
   students_list_empty
   puts "The names have to be shorter than?"
   length = STDIN.gets.chomp
+  arr = []
   puts "\nList of the students which name is shorter than #{length} characters:\n".upcase.center(50)
     $students.each do |student|
-      puts student[:name] if student[:name].length < length.to_i
+      arr << student[:name] if student[:name].length < length.to_i
+    end
+    if arr.empty?
+      puts "\n-No names shorter than #{length} has been found".upcase
+    else
+      puts arr
     end
   continue
 end
+
 
 def save_students
   students_list_empty
@@ -155,6 +162,20 @@ def save_students
   continue
 end
 
+def load_students_from
+  $students.clear
+  puts "From which file do you want load the list of students?".upcase
+  file_choosen = STDIN.gets.chomp
+  file = File.open(file_choosen, "r") do |data|
+  data.readlines.each do |line|
+    name, cohort, hobby, country, telephone = line.split(',')
+    $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
+  end
+  end
+  puts "\nThe list from #{file_choosen} has been load.".upcase
+end
+
+private
 
 def try_load_students
   filename = ARGV.first # First argument from the command line
@@ -170,23 +191,6 @@ def try_load_students
      exit # Quit the program
    end
 end
-
-
-
-def load_students_from
-  $students.clear
-  puts "From which file do you want load the list of students?".upcase
-  file_choosen = STDIN.gets.chomp
-  file = File.open(file_choosen, "r") do |data|
-  data.readlines.each do |line|
-    name, cohort, hobby, country, telephone = line.split(',')
-    $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
-  end
-  end
-  puts "\nThe list from #{file_choosen} has been load.".upcase
-end
-
-private
 
 def load_students_default(filename = "students.csv")
   file = File.open(filename, "r") do |data|
@@ -288,3 +292,13 @@ end
 
 try_load_students
 interactive_menu
+
+
+#EX 11 and 10 to do.
+=begin
+fai un while loop ai comandi x vedere le info, list of names,  correction name cosi se no trovano nessuno ti puo dare un mess di errore
+ aggiorna i tuoi file con le cose nuove che hai usato.. comandi etc.. .
+ command to delete a student from the list
+ Ogni comand ha continue?
+ Quelli che ne hanno bisogno checkano se la students global variable è empry?
+=end
