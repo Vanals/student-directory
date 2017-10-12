@@ -1,3 +1,4 @@
+
 require 'csv'
 ARGV
 $students = []
@@ -205,6 +206,12 @@ def try_load_students
    end
 end
 
+def file_source
+  puts __FILE__ #this prints out the name of the file.
+  puts File.dirname('/Users/marcovanali/Desktop/Projects/student-directory/directory.rb') # this prints out only the patch o the file
+  puts File.basename('/Users/marcovanali/Desktop/Projects/student-directory/directory.rb') #this prints out the name of the file given it's whole patch and name.
+end
+
 def load_students_default(filename = "students.csv")
     # Use the cvs libary is much better, the code is much shorter.
     # The following line, takes each line of the csv file and convert it into an array
@@ -303,5 +310,6 @@ def interactive_menu
   end
 end
 
+file_source
 try_load_students
 interactive_menu
