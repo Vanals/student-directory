@@ -1,4 +1,3 @@
-
 require 'csv'
 ARGV
 $students = []
@@ -49,20 +48,23 @@ end
 # This method allow us to correct the name of a student that has been enrolled.
 def correction_name
   students_list_empty
-  puts "CORRECTION NAME\n"
-  puts "Which name do you want to correct?"
-  wrong_name = STDIN.gets.chomp
-  puts "What is the new name?"
-  new_name = STDIN.gets.chomp
+  correction_name_data
   $students.each do |student|
     #If the name of a students is equal to what the user said, i will be replaced by the newone.
-    if student[:name] == wrong_name
-      student[:name] = new_name
-      puts "\nName of the student #{wrong_name} changed in #{new_name} \n".upcase
+    if student[:name] == @wrong_name
+      student[:name] = @new_name
+      puts "\nName of the student #{@wrong_name} changed in #{@new_name} \n".upcase
       continue
-      interactive_menu
     end
   end
+end
+
+def correction_name_data
+  puts "CORRECTION NAME\n"
+  puts "Which name do you want to correct?"
+  @wrong_name = STDIN.gets.chomp
+  puts "What is the new name?"
+  @new_name = STDIN.gets.chomp
 end
 
 # This method give us more information about a student, like: telephone number, country of birth, hobby.
