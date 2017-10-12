@@ -1,3 +1,4 @@
+require 'csv'
 ARGV
 $students = []
 $months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
@@ -161,15 +162,28 @@ def save_students
   continue
 end
 
+def save_students
+  students_list_empty
+  puts "In which file do you want to save the actual list?".upcase
+  file_choosen = STDIN.gets.chomp
+  #open the file for writing
+  CSV.open(file_choosen, "w") do |csv|
+    $students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby], student[:country], student[:telephone]]
+      csv << student_data
+    end
+  end
+  puts "The list of students has been saved.".upcase.center(50)
+  continue
+end
+
+
 def load_students_from
   $students.clear
   puts "From which file do you want load the list of students?".upcase
   file_choosen = STDIN.gets.chomp
-  file = File.open(file_choosen, "r") do |data|
-    data.readlines.each do |line|
-      name, cohort, hobby, country, telephone = line.split(',')
-      $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
-    end
+  CSV.foreach(file_choosen) do |data|
+      $students << {name: data[0], cohort: data[1].to_sym, hobby: data[2], country: data[3], telephone: data[4]}
   end
   puts "\nThe list from #{file_choosen} has been load.".upcase
 end
@@ -192,11 +206,12 @@ def try_load_students
 end
 
 def load_students_default(filename = "students.csv")
-  file = File.open(filename, "r") do |data|
-  data.readlines.each do |line|
-    name, cohort, hobby, country, telephone = line.chomp.split(',')
-    $students << {name: name, cohort: cohort.to_sym, hobby: hobby, country: country, telephone: telephone}
-    end
+    # Use the cvs libary is much better, the code is much shorter.
+    # The following line, takes each line of the csv file and convert it into an array
+    # Each item is seprated by the commas insite the csv file.
+    CSV.foreach(filename) do |data|
+    # Here we just take the itms we want, in each line, and put them in this hash which is gonna be put in the $students hash.
+    $students << {name: data[0], cohort: data[1].to_sym, hobby: data[2].to_sym, country: data[3], telephone: data[4]}
   end
   puts "The list of students has been load from students.csv.".upcase
   continue
