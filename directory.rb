@@ -22,7 +22,7 @@ def input_students
       cohort = STDIN.gets.chomp.to_sym
     end
     puts "\nHobby:"
-    hobby = $stdin.gets.chomp
+    hobby = STDIN.gets.chomp
     hobby = 'NotGiven' if hobby.empty?
     puts "\nCountry of birth:"
     country = STDIN.gets.chomp
